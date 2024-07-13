@@ -37,6 +37,10 @@ jobs:
         python -m pip install -r requirements_ubuntu.txt
         python -m pip freeze > constraints.txt
         cat constraints.txt
-    - name: Work in progress
+    - name: Execute NLP processing
       run: |
         ls
+        la Docs
+        ls Doc/2024_07_07
+        python Doc/2024_07_07/thing2.py
+        
