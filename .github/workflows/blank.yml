@@ -35,6 +35,7 @@ jobs:
         source dev_env/bin/activate
         python -m pip install --upgrade pip
         python -m pip install -r requirements_ubuntu.txt
+        python -m spacy download en_core_web_sm
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Work in progress
