@@ -31,7 +31,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements_ubuntu.txt ]; then pip install -r requirements_ubuntu.txt; fi
+        pip install -r requirements_ubuntu.txt
     - name: Work in progress
       run: |
         ls
