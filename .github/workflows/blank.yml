@@ -40,7 +40,7 @@ jobs:
     - name: Execute NLP processing
       run: |
         ls
-        la Docs
+        ls Docs
         ls Doc/2024_07_07
         python Doc/2024_07_07/thing2.py
         
