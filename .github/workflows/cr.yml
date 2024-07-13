@@ -48,4 +48,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NLP-report
-        path: ./Docs/2024_07_07/collocation_novels_2000.csv
+        path: ./Docs/2024_07_07/collocation_novels_*.csv
