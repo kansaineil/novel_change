@@ -5,7 +5,17 @@ import csv
 nlp = spacy.load("en_core_web_sm")
 
 downloaded = []
-with open("concordance-download_2000.txt") as f:
+input_file=None
+input_files=os.listdir("")
+for item in input_files:
+    if not item.startswith("concordance-download_"):continue
+    if not item.endswith(".txt"):continue
+    input_file=item
+    break
+if input_file==None:
+    raise Exception(f"Could not find an input file in {input_files}")
+output_file=input_file.replace("concordance-download_","collocation_novels_").replace(".txt",".csv")
+with open(input_file) as f:
     lines = f.readlines()
 
 for i in range(len(lines)):
@@ -15,7 +25,7 @@ for i in range(len(lines)):
     downloaded.append(line)
 
 # Prepare the CSV file
-with open("collocation_novels_2000.csv", mode="w", newline="") as csv_file:
+with open(output_file, mode="w", newline="") as csv_file:
     fieldnames = ["Original Text", "Relevant Span", "Relevant Noun", "Relevant Lemma"]
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     writer.writeheader()
