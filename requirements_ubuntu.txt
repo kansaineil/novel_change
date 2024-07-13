@@ -8,7 +8,6 @@ cloudpathlib==0.18.1
 confection==0.1.5
 conllu==5.0.1
 cymem==2.0.8
-csv
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl#sha256=86cc141f63942d4b2c5fcee06630fd6f904788d2f0ab005cce45aadb8fb73889
 en_core_sci_lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_lg-0.5.4.tar.gz#sha256=a2bfde10824958d51cd016b4142563373d553e24767d79b1abf8699596e31a5b
 en_core_sci_md @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_md-0.5.4.tar.gz#sha256=7c8fc52542dd1452ffce00b045c1298e2c185b7cf84793f8e0ec941987c09808
