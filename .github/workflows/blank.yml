@@ -44,4 +44,10 @@ jobs:
         source ../../dev_env/bin/activate
         python thing2.py
         ls
+    - name: Archive NLP results
+        working-directory: ./Docs/2024_07_07
+        uses: actions/upload-artifact@v4
+        with:
+          name: NLP-report
+          path: collocation_novels_2000.csv
         
