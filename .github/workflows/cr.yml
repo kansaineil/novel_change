@@ -44,7 +44,7 @@ jobs:
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on ${{ github.event.inputs.research_folder }}
-      working-directory: ${{ github.event.inputs.research_folder }}
+      working-directory: "${{ github.event.inputs.research_folder }}"
       run: |
         ls
         source ../../dev_env/bin/activate
