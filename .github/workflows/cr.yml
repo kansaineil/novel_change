@@ -44,7 +44,7 @@ jobs:
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on "${{ github.event.inputs.research_folder }}"
-      working-directory: "${{ github.event.inputs.research_folder }}"
+      working-directory: ${{ github.event.inputs.research-folder }}
       run: |
         ls
         source ../../dev_env/bin/activate
@@ -54,4 +54,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NLP-report
-        path: "${{ github.event.inputs.research_folder }}/collocation_novels_*.csv"
+        path: "${{ github.event.inputs.research-folder }}/collocation_novels_*.csv"
