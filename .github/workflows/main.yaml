@@ -3,10 +3,12 @@
 name: Python application
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+        input: 
+            description: "Test_Input"
+            required: false
+            default: "Default"
 
 permissions:
   contents: read
