@@ -41,6 +41,7 @@ jobs:
       working-directory: ./Docs/2024_07_07
       run: |
         ls
+        source dev_env/bin/activate
         python thing2.py
         ls
         
