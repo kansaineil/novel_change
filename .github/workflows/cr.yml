@@ -13,7 +13,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      name:
+      research-folder:
         type: choice
         description: Research folder
         options: 
@@ -43,8 +43,8 @@ jobs:
         python -m pip install -r requirements_ubuntu.txt
         python -m pip freeze > constraints.txt
         cat constraints.txt
-    - name: Execute NLP processing on Docs/2024_07_07
-      working-directory: ./Docs/2024_07_07
+    - name: "Execute NLP processing on ${{ github.event.inputs.research_folder }}"
+      working-directory: "${{ github.event.inputs.research_folder }}"
       run: |
         ls
         source ../../dev_env/bin/activate
@@ -54,4 +54,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NLP-report
-        path: ./Docs/2024_07_07/collocation_novels_*.csv
+        path: "${{ github.event.inputs.research_folder }}/collocation_novels_*.csv"
