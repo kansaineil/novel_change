@@ -43,7 +43,7 @@ jobs:
         python -m pip install -r requirements_ubuntu.txt
         python -m pip freeze > constraints.txt
         cat constraints.txt
-    - name: Execute NLP processing on ${{ github.event.inputs.research_folder }}
+    - name: Execute NLP processing on "${{ github.event.inputs.research_folder }}"
       working-directory: "${{ github.event.inputs.research_folder }}"
       run: |
         ls
