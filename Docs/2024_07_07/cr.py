@@ -7,7 +7,7 @@ nlp = spacy.load("en_core_web_sm")
 
 downloaded = []
 input_file=None
-input_files=os.listdir("")
+input_files=os.listdir(".")
 for item in input_files:
     if not item.startswith("concordance-download_"):continue
     if not item.endswith(".txt"):continue
