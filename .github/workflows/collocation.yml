@@ -12,6 +12,15 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      concordance-file:
+        type: choice
+        description: concordance file
+        options: 
+        - all
+        - concordance-download_1985.txt
+        - concordance-download_2020.txt
+        
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,18 +28,38 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    name: Setup Python NLP work environment
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m venv dev_env
+        source dev_env/bin/activate
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements_ubuntu.txt
+        python -m pip freeze > constraints.txt
+        cat constraints.txt
+    - name: Execute NLP processing on ${{ github.event.inputs.concordance-file }}
+      working-directory: ./Collocation
+      run: |
+        ls
+        source ../dev_env/bin/activate
+        python collocation.py -i ${{ github.event.inputs.concordance-file }}
+        ls
+    - name: Archive NLP inputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: NLP-inputs
+        path: "./Collocation/concordance-download_*.txt"
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: Archive NLP results
+      uses: actions/upload-artifact@v4
+      with:
+        name: NLP-outputs
+        path: "./Collocation/collocation_novels_*.csv"
