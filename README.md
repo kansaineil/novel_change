@@ -33,7 +33,7 @@
    python -m pip install --upgrade pip
 
 ### Install requirements
-   python -m pip install -r requirements_ubuntu.txt
+   python -m pip install -r requirements_ubuntu-latest.txt
 
   
    
