@@ -44,7 +44,7 @@ jobs:
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on ${{ github.event.inputs.research-folder }}
-      working-directory: ./novel_change/Collocation
+      working-directory: ./Collocation
       run: |
         ls
         source ../../dev_env/bin/activate
@@ -54,10 +54,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NLP-inputs
-        path: "novel_change/Collocation/concordance-download_*.txt"
+        path: "./Collocation/concordance-download_*.txt"
 
     - name: Archive NLP results
       uses: actions/upload-artifact@v4
       with:
         name: NLP-outputs
-        path: "novel_change/Collocation/collocation_novels_*.csv"
+        path: "./Collocation/collocation_novels_*.csv"
