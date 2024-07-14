@@ -48,8 +48,7 @@ jobs:
         python -m venv dev_env
         source dev_env/bin/activate
         python -m pip install --upgrade pip
-        CFLAGS="-mavx -DWARN(a)=(a)" python -m pip install nmslib
-        python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
+        CFLAGS="-mavx -DWARN(a)=(a)" python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on ${{ github.event.inputs.concordance-file }}
