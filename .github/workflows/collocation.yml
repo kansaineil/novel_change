@@ -49,9 +49,15 @@ jobs:
         source dev_env/bin/activate
         python -m pip install --upgrade pip
     - name: Install dependencies on ${{ github.event.inputs.runs-on }}
+      if: ${{ github.event.inputs.runs-on }} == 'macos-latest'
       run: |
         source dev_env/bin/activate
         CFLAGS="-mavx -DWARN(a)=(a)" python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
+    - name: Install dependencies on ${{ github.event.inputs.runs-on }}
+      if: ${{ github.event.inputs.runs-on }} == 'ubuntu-latest'
+      run: |
+        source dev_env/bin/activate
+        python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
     - name: Publish Python modules used on  ${{ github.event.inputs.runs-on }}
       run: |
         source dev_env/bin/activate
