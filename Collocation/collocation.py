@@ -25,6 +25,12 @@ if input_spec=="all":
         input_files.append(item)
 else:
     input_files.append(input_spec)
+    for item in os.listdir("."):
+        if not item.startswith("concordance-download_"):continue
+        if not item.endswith(".txt"):continue
+        if item==input_spec:continue
+        os.unlink(item)
+
 print(f"{input_files=}")
 
 for input_file in input_files:
@@ -42,7 +48,7 @@ for input_file in input_files:
     # Prepare the CSV file
     output_file=input_file.replace("concordance-download_","collocation_novels_").replace(".txt","_sci.csv")
     print(f"Processing {output_file=} ...")
-    with open("output_file", mode="w", newline="") as csv_file:
+    with open(output_file, mode="w", newline="") as csv_file:
         fieldnames = ["Original Text", "Relevant Noun", "Relevant Lemma"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
