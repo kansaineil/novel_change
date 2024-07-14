@@ -50,8 +50,14 @@ jobs:
         source ../../dev_env/bin/activate
         python cr.py
         ls
+    - name: Archive NLP inputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: NLP-inputs
+        path: "${{ github.event.inputs.research-folder }}/concordance-download_*.txt"
+
     - name: Archive NLP results
       uses: actions/upload-artifact@v4
       with:
-        name: NLP-report
+        name: NLP-outputs
         path: "${{ github.event.inputs.research-folder }}/collocation_novels_*.csv"
