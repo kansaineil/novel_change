@@ -48,7 +48,7 @@ jobs:
         python -m venv dev_env
         source dev_env/bin/activate
         python -m pip install --upgrade pip
-        python -m pip install -r requirements_ubuntu.txt
+        python -m pip install -r requirements_${{ github.event.inputs.runs-on }}
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on ${{ github.event.inputs.concordance-file }}
