@@ -1,5 +1,6 @@
 import spacy
 import csv
+import os
 
 # Load the small English pipeline
 nlp = spacy.load("en_core_web_sm")
