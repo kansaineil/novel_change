@@ -1,1 +1,1 @@
-nmslib
+--no-binary :all: nmslib
