@@ -6,7 +6,7 @@ import csv
 nlp = spacy.load("en_core_sci_lg")
 
 downloaded = []
-with open("../../concordance-download_1985.txt") as f:
+with open("concordance-download_1985.txt") as f:
     lines = f.readlines()
 
 for i in range(len(lines)):
