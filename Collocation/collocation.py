@@ -1,6 +1,6 @@
 import sys
 import os
-print(f"{sys.argv=}")
+
 
 import spacy
 import scispacy
@@ -10,6 +10,7 @@ import csv
 nlp = spacy.load("en_core_sci_lg")
 
 input_spec="concordance-download_1985.txt"
+print(f"{sys.argv=}")
 for i in range(len(sys.argv)):
     if sys.argv[i]=="-i":
         if i+1<len(sys.argv):
