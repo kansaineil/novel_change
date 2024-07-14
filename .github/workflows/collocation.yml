@@ -17,8 +17,10 @@ on:
         type: choice
         description: concordance file
         options: 
+        - all
         - concordance-download_1985.txt
         - concordance-download_2020.txt
+        
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,12 +45,12 @@ jobs:
         python -m pip install -r requirements_ubuntu.txt
         python -m pip freeze > constraints.txt
         cat constraints.txt
-    - name: Execute NLP processing on ${{ github.event.inputs.research-folder }}
+    - name: Execute NLP processing on ${{ github.event.inputs.concordance-file }}
       working-directory: ./Collocation
       run: |
         ls
         source ../dev_env/bin/activate
-        python collocation.py
+        python collocation.py -i ${{ github.event.inputs.concordance-file }}
         ls
     - name: Archive NLP inputs
       uses: actions/upload-artifact@v4
