@@ -1,2 +1,8 @@
---no-binary :all: nmslib
 spacy
+scispacy
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl#sha256=86cc141f63942d4b2c5fcee06630fd6f904788d2f0ab005cce45aadb8fb73889
+en_core_sci_lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_lg-0.5.4.tar.gz#sha256=a2bfde10824958d51cd016b4142563373d553e24767d79b1abf8699596e31a5b
+en_core_sci_md @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_md-0.5.4.tar.gz#sha256=7c8fc52542dd1452ffce00b045c1298e2c185b7cf84793f8e0ec941987c09808
+en_core_sci_scibert @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_scibert-0.5.4.tar.gz#sha256=be4afaa2710d63206fafa7864001acbfab1225800bbab577f32765435e29b7f2
+en_core_sci_sm @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_sm-0.5.4.tar.gz#sha256=a54a114ee11dab7cf6db8cf69ef485145011537f45f3c16c71338c48fd6f070b
+
