@@ -47,7 +47,7 @@ jobs:
       working-directory: ./Collocation
       run: |
         ls
-        source ../../dev_env/bin/activate
+        source ../dev_env/bin/activate
         python collocation.py
         ls
     - name: Archive NLP inputs
