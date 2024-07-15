@@ -4,11 +4,6 @@ name: Collocation
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,12 +15,14 @@ on:
         - all
         - concordance-download_1985.txt
         - concordance-download_2020.txt
+        default: all
       runs-on:
         type: choice
         description: Operating system
         options: 
         - ubuntu-latest
         - macos-latest
+        default: ubuntu-latest
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
