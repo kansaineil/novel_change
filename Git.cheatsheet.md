@@ -14,4 +14,21 @@
 
 ## git checkout -B "user/dev" "origin/user/dev"
 
-git commit -F "D:/Munteanu/Users/sormu/Documents/Maria/novel_change_wp/.git/COMMITMESSAGE"
+
+# add a new file 
+
+## git add new_file.md
+
+# commit file to local branch
+
+## git commit -m "Some message"
+
+# Pull remote branch into local branch
+
+## git pull
+
+# Push local branch into remote branch
+
+## git push
+
+
