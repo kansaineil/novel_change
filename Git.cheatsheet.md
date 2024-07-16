@@ -1,10 +1,10 @@
 # Clone repo
 
-## git clone -v --recurse-submodules --progress "https://github.com/kansaineil/novel_change" 
+## git clone "https://github.com/kansaineil/novel_change" . 
 
 # Fetch all
 
-## git.exe -c fetch.parallel=0 -c submodule.fetchJobs=0 fetch --progress "--all"
+## git.exe fetch
 
 #List local and remotes branches 
 
@@ -23,6 +23,11 @@
 
 ## git commit -m "Some message"
 
+# commit all deleted and modified files to local branch (new files need to be explicitly added)
+
+## git commit -a -m "Some message"
+
+
 # Pull remote branch into local branch
 
 ## git pull
@@ -30,5 +35,13 @@
 # Push local branch into remote branch
 
 ## git push
+
+# check differences
+
+## git diff
+
+# help
+
+## git help <command>
 
 
