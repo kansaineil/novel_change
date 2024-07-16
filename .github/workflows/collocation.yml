@@ -4,11 +4,6 @@ name: Collocation
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,6 +15,14 @@ on:
         - all
         - concordance-download_1985.txt
         - concordance-download_2020.txt
+        default: all
+      runs-on:
+        type: choice
+        description: Operating system
+        options: 
+        - ubuntu-latest
+        - macos-latest
+        default: ubuntu-latest
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -27,7 +30,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runs-on }}
     name: Setup Python NLP work environment
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -37,12 +40,24 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
-    - name: Install dependencies
+    - name: Create virtual environment and update pip
       run: |
         python -m venv dev_env
         source dev_env/bin/activate
         python -m pip install --upgrade pip
-        python -m pip install -r requirements_ubuntu.txt
+    - name: Install dependencies on ${{ github.event.inputs.runs-on }}
+      if: ${{ github.event.inputs.runs-on }} == 'macos-latest'
+      run: |
+        source dev_env/bin/activate
+        CFLAGS="-mavx -DWARN(a)=(a)" python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
+    - name: Install dependencies on ${{ github.event.inputs.runs-on }}
+      if: ${{ github.event.inputs.runs-on }} == 'ubuntu-latest'
+      run: |
+        source dev_env/bin/activate
+        python -m pip install -r requirements_${{ github.event.inputs.runs-on }}.txt
+    - name: Publish Python modules used on  ${{ github.event.inputs.runs-on }}
+      run: |
+        source dev_env/bin/activate
         python -m pip freeze > constraints.txt
         cat constraints.txt
     - name: Execute NLP processing on ${{ github.event.inputs.concordance-file }}

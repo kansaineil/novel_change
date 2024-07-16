@@ -33,7 +33,22 @@
    python -m pip install --upgrade pip
 
 ### Install requirements
-   python -m pip install -r requirements_ubuntu.txt
+   python -m pip install -r requirements_ubuntu-latest.txt
 
+## Setup Local MacOS environment
+
+### Install python 3.10 
+   
+### Create a Python 3.10 virtual environment 
+   python -m venv dev_env
+
+### Activate Python virtual environment
+  source dev_env/bin/activate
+
+### Update pip
+   python -m pip install --upgrade pip
+
+### Install requirements
+   CFLAGS="-mavx -DWARN(a)=(a)" python -m pip install -r requirements_macos-latest.txt
   
    
