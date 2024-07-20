@@ -9,8 +9,8 @@ import csv
 # Load the SciSpacy large model
 nlp = spacy.load("en_core_sci_lg")
 
-input_spec="concordance_1992new.txt"
-output_specs="S1992.csv"
+input_spec="concordance_1990new.txt"
+output_specs="test.csv"
 
 no_option=True
 print(f"{sys.argv=}")
@@ -48,8 +48,14 @@ for input_file in input_files:
     for i in range(len(lines)):
         if i == 0: continue  # header
         tokens = lines[i].strip().split("\t")
+        doc = nlp(tokens[2])
+        skip_novel=0
+        for token in doc:
+            # Check if the token is "novel"
+            if token.lemma_ == "novel":
+                skip_novel+=1
         line = " ".join(tokens[2:5])
-        downloaded.append(line)
+        downloaded.append([line,skip_novel])
 
     # Prepare the CSV file
     output_file=input_file.replace("concordance-download_","collocation_novels_").replace(".txt","_sci.csv")
@@ -63,13 +69,18 @@ for input_file in input_files:
         writer.writeheader()
 
         # Process each text
-        for text in downloaded:
+        for item in downloaded:
+            text=item[0]
+            skip_novel=item[1]
             doc = nlp(text)
 
             # Iterate over the tokens
             for token in doc:
                 # Check if the token is "novel"
                 if token.lemma_ == "novel":
+                    if skip_novel>0:
+                        skip_novel-=1
+                        continue
                     noun = None
 
                     # Check head tokens up to 2 levels up the dependency tree
