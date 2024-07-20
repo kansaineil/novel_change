@@ -9,8 +9,8 @@ import csv
 # Load the SciSpacy large model
 nlp = spacy.load("en_core_sci_lg")
 
-input_spec="concordance-download_1985.txt"
-output_specs="maria_wahatever.csv"
+input_spec="concordance_1992new.txt"
+output_specs="S1992.csv"
 
 no_option=True
 print(f"{sys.argv=}")
@@ -69,7 +69,7 @@ for input_file in input_files:
             # Iterate over the tokens
             for token in doc:
                 # Check if the token is "novel"
-                if token.text.lower() == "novel":
+                if token.lemma_ == "novel":
                     noun = None
 
                     # Check head tokens up to 2 levels up the dependency tree
@@ -99,6 +99,4 @@ for input_file in input_files:
                     })
 
                     break
-                    und_text
-                    Exception(f'Error: Text not found in doc {str([token.text in doc])}')
-                
+                    
