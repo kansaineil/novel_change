@@ -9,8 +9,8 @@ import csv
 # Load the SciSpacy large model
 nlp = spacy.load("en_core_sci_lg")
 
-input_spec="concordance_1990new.txt"
-output_specs="test.csv"
+input_spec="concordance-download_1990.txt"
+output_specs="collocation_novels_1990.csv"
 
 no_option=True
 print(f"{sys.argv=}")
