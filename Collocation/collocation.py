@@ -9,12 +9,16 @@ import csv
 # Load the SciSpacy large model
 nlp = spacy.load("en_core_sci_lg")
 
-input_spec="concordance-download_1985.txt"
+input_spec="concordance-download_1990.txt"
+output_specs="collocation_novels_1990.csv"
+
+no_option=True
 print(f"{sys.argv=}")
 for i in range(len(sys.argv)):
     if sys.argv[i]=="-i":
         if i+1<len(sys.argv):
             input_spec=sys.argv[i+1]
+            no_option=False
             break
 print(f"{input_spec=}")
 
@@ -26,11 +30,12 @@ if input_spec=="all":
         input_files.append(item)
 else:
     input_files.append(input_spec)
-    for item in os.listdir("."):
-        if not item.startswith("concordance-download_"):continue
-        if not item.endswith(".txt"):continue
-        if item==input_spec:continue
-        os.unlink(item)
+    if no_option==False:
+        for item in os.listdir("."):
+            if not item.startswith("concordance-download_"):continue
+            if not item.endswith(".txt"):continue
+            if item==input_spec:continue
+            os.unlink(item)
 
 print(f"{input_files=}")
 
@@ -43,11 +48,20 @@ for input_file in input_files:
     for i in range(len(lines)):
         if i == 0: continue  # header
         tokens = lines[i].strip().split("\t")
+        doc = nlp(tokens[2])
+        skip_novel=0
+        for token in doc:
+            # Check if the token is "novel"
+            if token.lemma_ == "novel":
+                skip_novel+=1
         line = " ".join(tokens[2:5])
-        downloaded.append(line)
+        downloaded.append([line,skip_novel])
 
     # Prepare the CSV file
     output_file=input_file.replace("concordance-download_","collocation_novels_").replace(".txt","_sci.csv")
+    #Maria's choice of output
+    if no_option==True:
+        output_file=output_specs
     print(f"Processing {output_file=} ...")
     with open(output_file, mode="w", newline="") as csv_file:
         fieldnames = ["Original Text", "Relevant Noun", "Relevant Lemma"]
@@ -55,13 +69,18 @@ for input_file in input_files:
         writer.writeheader()
 
         # Process each text
-        for text in downloaded:
+        for item in downloaded:
+            text=item[0]
+            skip_novel=item[1]
             doc = nlp(text)
 
             # Iterate over the tokens
             for token in doc:
                 # Check if the token is "novel"
-                if token.text.lower() == "novel":
+                if token.lemma_ == "novel":
+                    if skip_novel>0:
+                        skip_novel-=1
+                        continue
                     noun = None
 
                     # Check head tokens up to 2 levels up the dependency tree
@@ -91,6 +110,4 @@ for input_file in input_files:
                     })
 
                     break
-                    und_text
-                    Exception(f'Error: Text not found in doc {str([token.text in doc])}')
-                
+                    
