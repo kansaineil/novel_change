@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas
 import split_file_reader
 import tarfile
 import pprint
@@ -74,12 +74,12 @@ lemma_totals=[]
 # the new column has the header count of all lemma_tokens
 
 print(f"Reading content of {file_name_excel} ...")
-df = pd.read_excel(file_name_excel)
+excel_table = pandas.read_excel(file_name_excel)
 
 
 print(f"Add count_off_all_lemma_tokens column")
-for i in range(len(df["Relevant Lemma"].values)):
-    lemma=df["Relevant Lemma"].values[i]
+for i in range(len(excel_table["Relevant Lemma"].values)):
+    lemma=excel_table["Relevant Lemma"].values[i]
     key=lemma+"::"+year
     #print(f"{key=}")
     if key in map_lemmas.keys():
@@ -93,13 +93,13 @@ for i in range(len(df["Relevant Lemma"].values)):
     lemma_totals.append(lemmatotal)
     #print("\n")
 
-#add data in excel
+#add data in excel table
     
-df.insert(3, "count_of_all_lemma_tokens", lemma_totals, True)
+excel_table.insert(3, "count_of_all_lemma_tokens", lemma_totals, True)
 
-# save excel file in the output file
+# save excel table in the output file
 
 out_file_name_excel="Out_"+file_name_excel
 print(f"Writing modified content to {out_file_name_excel} ...")
-df.to_excel(out_file_name_excel, index=False)
+excel_table.to_excel(out_file_name_excel, index=False)
 
