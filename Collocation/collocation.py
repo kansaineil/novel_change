@@ -6,11 +6,13 @@ import spacy
 import scispacy
 import csv
 
+import time
+
 # Load the SciSpacy large model
 nlp = spacy.load("en_core_sci_lg")
 
-input_spec="concordance-download_1990.txt"
-output_specs="collocation_novels_1990.csv"
+input_spec="collocations_all_years.txt"
+output_specs="novel_collocates_1985-2020.csv"
 
 no_option=True
 print(f"{sys.argv=}")
@@ -45,18 +47,6 @@ for input_file in input_files:
     with open(input_file) as f:
         lines = f.readlines()
 
-    for i in range(len(lines)):
-        if i == 0: continue  # header
-        tokens = lines[i].strip().split("\t")
-        doc = nlp(tokens[2])
-        skip_novel=0
-        for token in doc:
-            # Check if the token is "novel"
-            if token.lemma_ == "novel":
-                skip_novel+=1
-        line = " ".join(tokens[2:5])
-        downloaded.append([line,skip_novel])
-
     # Prepare the CSV file
     output_file=input_file.replace("concordance-download_","collocation_novels_").replace(".txt","_sci.csv")
     #Maria's choice of output
@@ -64,50 +54,67 @@ for input_file in input_files:
         output_file=output_specs
     print(f"Processing {output_file=} ...")
     with open(output_file, mode="w", newline="") as csv_file:
-        fieldnames = ["Original Text", "Relevant Noun", "Relevant Lemma"]
+        fieldnames = ["Original Text", "Relevant Noun", "Relevant Lemma", "Year"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
 
-        # Process each text
-        for item in downloaded:
-            text=item[0]
-            skip_novel=item[1]
-            doc = nlp(text)
+        line_number = 0
+        with open(input_file) as f:
+            for file_line in f:
+                
+                if line_number % 1000 == 0:
+                        print(line_number, time.ctime(time.time()))
+                if line_number == 0:
+                    line_number = line_number + 1
+                    continue  # header
+                line_number = line_number + 1
+                
+                tokens = file_line.strip().split("\t")
+                doc = nlp(tokens[2])
+                abstract_year= nlp(tokens[5])
+                skip_novel=0
+                for token in doc:
+                    # Check if the token is "novel"
+                    if token.lemma_ == "novel":
+                        skip_novel+=1
+                text = " ".join(tokens[2:5])
+                doc = nlp(text)
 
-            # Iterate over the tokens
-            for token in doc:
-                # Check if the token is "novel"
-                if token.lemma_ == "novel":
-                    if skip_novel>0:
-                        skip_novel-=1
-                        continue
-                    noun = None
+                # Iterate over the tokens
+                for i, token in enumerate(doc):
+                    # Check if the token is "novel"
+                    if token.lemma_ == "novel":
+                        if skip_novel>0:
+                            skip_novel-=1
+                            continue
+                        noun = None
 
-                    # Check head tokens up to 2 levels up the dependency tree
-                    head_token = token.head
-                    for _ in range(2):
-                        if head_token.pos_ == "NOUN" and noun is None:
-                            noun = head_token
-                        head_token = head_token.head
+                        # Check head tokens up to 2 levels up the dependency tree
+                        head_token = token.head
+                        for _ in range(2):
+                            if head_token.pos_ == "NOUN" and noun is None:
+                                noun = head_token
+                            head_token = head_token.head
 
-                    # Check children tokens for predicative usage
-                    for child in token.children:
-                        if child.dep_ == "attr" and child.pos_ == "NOUN":
-                            noun = child
+                        # Check children tokens for predicative usage
+                        for child in token.children:
+                            if child.dep_ == "attr" and child.pos_ == "NOUN":
+                                noun = child
 
-                    # Check the head token's children for the nominal subject in predicative constructions
-                    for child in token.head.children:
-                        if child.dep_ == "nsubj" and (child.pos_ == "NOUN" or child.pos_ == "PRON"):
-                            noun = child
+                        # Check the head token's children for the nominal subject in predicative constructions
+                        for child in token.head.children:
+                            if child.dep_ == "nsubj" and (child.pos_ == "NOUN" or child.pos_ == "PRON"):
+                                noun = child
 
-                    relevant_noun = "N/A" if noun is None else noun.text
-                    relevant_lemma = "N/A" if noun is None else noun.lemma_
+                        relevant_noun = "N/A" if noun is None else noun.text
+                        relevant_lemma = "N/A" if noun is None else noun.lemma_
 
-                    writer.writerow({
-                        "Original Text": text,
-                        "Relevant Noun": relevant_noun,
-                        "Relevant Lemma": relevant_lemma
-                    })
+                        writer.writerow({
+                            "Original Text": text,
+                            "Relevant Noun": relevant_noun,
+                            "Relevant Lemma": relevant_lemma,
+                            "Year": abstract_year
+                        })
 
-                    break
-                    
+                        break
+                        
