@@ -4,14 +4,31 @@ import tarfile
 import pprint
 import os
 
-file_name_excel="1991datatable.xlsx"
+#
+
+file_name_excel="../novel_collocates_1985-2020.xlsx"
+file_name_csv_out="../novel_collocates_1985-2020_out.csv"
 file_name_txt="all_lemma.txt.dir"
-year="1991"
+
+
+print(f"Reading content of {file_name_excel} ...")
+excel_table = pandas.read_excel(file_name_excel)
+
+relevant_lemma_year_counts={}
+for i in range(len(excel_table["Relevant Lemma"].values)):
+    relevant_lemma=excel_table["Relevant Lemma"].values[i]
+    year=excel_table["Year"].values[i]
+    relevant_lemma_year=f"{year}::{relevant_lemma}"
+    if not relevant_lemma_year in relevant_lemma_year_counts.keys():
+        relevant_lemma_year_counts[relevant_lemma_year]=1 #first time found
+    else:
+        relevant_lemma_year_counts[relevant_lemma_year]+=1 #found again
+
 
 # files larger that 100 MB cannot be stored in Github
 # if that's the case, the file is split in 10MB parts with 7-zip
 #  and stored in a folder
-# foldername is file_name_txt with ".dir" appended at the end
+# foldername is file_name_txt with ".dir" at the end
 if file_name_txt.endswith(".dir"):
     file_name_txt_dir=file_name_txt
     file_name_txt=file_name_txt[0:-4]
@@ -36,9 +53,6 @@ if file_name_txt.endswith(".dir"):
     with split_file_reader.SplitFileReader(filepaths, mode="rb") as fin:
         with tarfile.open(mode="r|*", fileobj=fin) as tar:
             tar.extractall()
-
-
-
 
 # read all_lemma.txt and create a map where key is "lemma:year" and value is token from that line
 
@@ -66,40 +80,14 @@ for i in range(len(lines)):
     map_lemmas[key]=tokens
 
 
-lemma_totals=[]
-
-#match data`
-# read the excel file line by line
-# for each "Relevant Lemma" find the total matches in the year and add them in a new column
-# the new column has the header count of all lemma_tokens
-
-print(f"Reading content of {file_name_excel} ...")
-excel_table = pandas.read_excel(file_name_excel)
-
-
-print(f"Add count_off_all_lemma_tokens column")
-for i in range(len(excel_table["Relevant Lemma"].values)):
-    lemma=excel_table["Relevant Lemma"].values[i]
-    key=lemma+"::"+year
-    #print(f"{key=}")
-    if key in map_lemmas.keys():
-        #print(f"{map_lemmas[key]=}")
-        lemmatotal=int(map_lemmas[key][2])
-        
-    else:
-        #print(f"{key} not found")
-        lemmatotal="N/A"
-    #print(f"{lemmatotal=}")
-    lemma_totals.append(lemmatotal)
-    #print("\n")
-
-#add data in excel table
-    
-excel_table.insert(3, "count_of_all_lemma_tokens", lemma_totals, True)
-
-# save excel table in the output file
-
-out_file_name_excel="Out_"+file_name_excel
-print(f"Writing modified content to {out_file_name_excel} ...")
-excel_table.to_excel(out_file_name_excel, index=False)
+with open(file_name_csv_out,"w") as f:
+    print("Year,Relevant Lemma,Collocation Frequency,Lemma Frequency",file=f)
+    for key in relevant_lemma_year_counts.keys():
+        year=key[0:4]
+        relevant_lemma=key[6:]
+        count=relevant_lemma_year_counts[key]
+        key2=f"{relevant_lemma}::{year}"
+        lemma_frequency=map_lemmas[key2][2] if key2 in map_lemmas.keys() else "N/A"
+        print(f"{year},{relevant_lemma},{count},{lemma_frequency}",file=f)
+print(f"{file_name_csv_out}")
 
